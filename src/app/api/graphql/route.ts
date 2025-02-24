@@ -10,34 +10,19 @@ import { resolvers } from "./schema/resolvers";
 //   type Query {
 //     hello: String
 //   }
-
-//   type User {
-//     id: ID!
-//     fname: String!
-//     lname: String!
-//     mobile: String!
-//     email: String!
-//     password: String!
-//     role: String!
-//     createdById: ID
-//     updatedById: ID
-//     createdAt: String!
-//     updatedAt: String!
-//   }
 // `;
 
 // Define your GraphQL resolvers
 // const resolvers = {
 //   Query: {
 //     hello: () => "Hello, world!",
-    
 //   },
 // };
 
 // Create Apollo Server instance
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
 });
 
 // Create the Next.js API handler

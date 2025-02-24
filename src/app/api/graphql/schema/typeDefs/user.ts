@@ -26,6 +26,24 @@ export const userTypeDefs = gql`
   type Query {
     hello: String!
   }
+
+
+  input CreateUserInput {
+    fname: String!
+    lname: String!
+    mobile: String!
+    email: String!
+    password: String!
+    role: String!
+    createdById: ID
+    updatedById: ID
+  }
+
+
+  type Mutation {
+    createUser(input: CreateUserInput!): User!
+  }
+
 #   type Query {
 #     "Hello Query"
 #     hello: String

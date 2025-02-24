@@ -7,16 +7,18 @@ export const userResolvers = {
         // getAllSheets: async () => getAllSheets()
     },
 
-    // Mutation: {
+    
+
+    Mutation: {
         // createSheet: async (_, { sheet }, { role, creator }) =>
-        //     createSheet({ ...sheet, role, creator }),
+            // createSheet({ ...sheet, role, creator }),
 
         // updateSheet: async (_, { id, sheet }, { role, creator }) =>
         //     updateSheet({ id, ...sheet, role, creator }),
 
         // deleteSheet: async (_, { id }, { role, creator }) =>
         //     deleteSheet({ id, role, creator }),
-    // }
+    }
 };
 
 // export default sheets;
