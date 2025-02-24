@@ -1,0 +1,30 @@
+import { startServerAndCreateNextHandler } from "@as-integrations/next";
+import { ApolloServer } from "@apollo/server";
+import { NextRequest } from "next/server";
+import { gql } from "graphql-tag";
+
+// Define your GraphQL schema
+const typeDefs = gql`
+  type Query {
+    hello: String
+  }
+`;
+
+// Define your GraphQL resolvers
+const resolvers = {
+  Query: {
+    hello: () => "Hello, world!",
+  },
+};
+
+// Create Apollo Server instance
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
+// Create the Next.js API handler
+const handler = startServerAndCreateNextHandler<NextRequest>(server);
+
+// Export the route handlers for Next.js API routes
+export { handler as GET, handler as POST };
