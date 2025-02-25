@@ -1,6 +1,25 @@
 import { GraphQLError } from "graphql";
 
 export class ErrorHandler {
+
+    static handleAuthenticationFailedError(message = "Authentication failed") {
+        throw new GraphQLError(message, {
+            extensions: {
+                code: "AUTHENTICATION_FAILED",
+                http: { status: 401 },
+            },
+        });
+    }
+
+    static handleUnauthorizedError() {
+        throw new GraphQLError("Unauthorized", {
+            extensions: {
+                code: "UNAUTHORIZED",
+                http: { status: 401 },
+            },
+        });
+    }
+
     static handleValidationError(errors: any) {
         throw new GraphQLError("Validation failed", {
             extensions: {

@@ -24,9 +24,9 @@ export const userTypeDefs = gql`
   }
 
   type UserLoginData {
+    id: ID!
     fname: String!
     lname: String!
-    mobile: String!
     role: String!
   }
 

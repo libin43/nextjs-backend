@@ -29,9 +29,9 @@ export class AuthService {
                 mobile: userData.mobile,
             },
             select: {
+                id: true,
                 fname: true,
                 lname: true,
-                mobile: true,
                 password: true,
                 role: true,
             }
@@ -42,11 +42,12 @@ export class AuthService {
             const isPassMatch = await BcryptService.comparePassword(user.password, data.password)
             if(!isPassMatch){
                 console.log('Invalid credentials')
+                ErrorHandler.handleAuthenticationFailedError()
             }
             const payload = {
+                id: data.id,
                 fname: data.fname,
                 lname: data.lname,
-                mobile: data.mobile,
                 role: data.role,
             }
             const token = JwtService.generateToken(payload)
