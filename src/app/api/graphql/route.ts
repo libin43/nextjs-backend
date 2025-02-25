@@ -24,6 +24,7 @@ import { GraphQLError, GraphQLFormattedError } from "graphql";
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  
   formatError: (formattedError: GraphQLFormattedError, error: unknown): GraphQLFormattedError => {
     if (error instanceof GraphQLError) {
       const extensions = error.extensions as { http?: { status?: number } }
