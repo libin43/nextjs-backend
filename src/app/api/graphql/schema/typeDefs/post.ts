@@ -9,25 +9,41 @@ export const posTypeDefs = gql`
 #     total: Int
 #   }
 
+scalar DateTime
+
   type Post {
     id: ID!
     title: String!
-    content: String!
+    content: String
     authorId: ID!
     createdById: ID
     updatedById: ID
-    createdAt: String!
-    updatedAt: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+  }
+
+
+  type Author {
+    id: ID!
+    fname: String
+    lname: String
+  }
+
+  type PostById {
+    id: ID!
+    title: String!
+    content: String
+    author: Author
   }
 
   type PostList {
-  data: [Post!]!
+  data: [PostById!]!
   totalCount: Int!
 }
 
 
   type Query {
-    getPost(id: ID!): Post!
+    getPost(id: ID!): PostById!
     getAllPosts(
     search: String
     page: Int!
@@ -54,6 +70,7 @@ export const posTypeDefs = gql`
   type Mutation {
     createPost(input: CreatePostInput!): Post!
     updatePost(input: UpdatePostInput!): Post!
+    deletePost(id: ID!): Post!
   }
 
 `;
