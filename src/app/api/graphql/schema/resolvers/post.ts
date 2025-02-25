@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { PostService } from "@/app/api/services/post/service";
 import { CreatePostInput } from "@/app/api/services/post/dto/createPostDto";
 import { ErrorHandler } from "@/utils/errorHandler";
+import { authorizeRoles } from "@/middlewares/roleMiddleware";
 
 const postService = new PostService()
 const authService = new AuthService()
@@ -56,33 +57,25 @@ export const postResolvers = {
 
     Mutation: {
 
-        createPost: async (_: any, { input }: { input: CreatePostInput }, {user}: any) => {
+        createPost: async (_: any, { input }: { input: CreatePostInput }, { user }: any) => {
             try {
-                // console.log(context, 'context')
-                // console.log(context.user, 'user')
-                if(!user){
-                    ErrorHandler.handleUnauthorizedError()
-                }
+                if (!user) ErrorHandler.handleUnauthorizedError()
                 return postService.createPost(input, user.id)
-                // const authHeader = context.req.headers.get('authorization');
-                // console.log(authHeader,'ath header')
-                // console.log(input, 'input')
-                // const newUser = await postService.createPost(input);
-                // console.log(newUser, 'created in db')
-                // return newUser;
             } catch (error) {
                 return error
             }
         },
 
-        // updateUser: async (_: any, { input }: { input: UpdateUserInput }) => {
-        //     try {
-        //         // console.log(input, 'input')
-        //         return userService.updateUser(input);
-        //     } catch (error) {
-        //         return error
-        //     }
-        // },
+        updatePost: authorizeRoles([UserRole.ADMIN, UserRole.USER])(
+            async (_: any, { input }: { input: UpdateUserInput }, { user }: any) => {
+            try {
+                // console.log(input, 'input')
+                if (!user) ErrorHandler.handleUnauthorizedError()
+                return postService.updatePost(input, user.id, user.role)
+            } catch (error) {
+                return error
+            }
+        })
     },
 };
 

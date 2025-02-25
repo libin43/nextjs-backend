@@ -20,6 +20,24 @@ export class ErrorHandler {
         });
     }
 
+    static handleRoleRestrictError(){
+        throw new GraphQLError("Access Denied: Insufficient Role Privileges", {
+            extensions: {
+              code: "ROLE_RESTRICTED",
+              http: { status: 403 },
+            },
+          });
+    }
+
+    static handleForbiddenError(entity: string) {
+        throw new GraphQLError(`${entity} FORBIDDEN`, {
+            extensions: {
+                code: "FORBIDDEN",
+                http: { status: 403 },
+            },
+        });
+    }
+
     static handleValidationError(errors: any) {
         throw new GraphQLError("Validation failed", {
             extensions: {
@@ -43,7 +61,8 @@ export class ErrorHandler {
     }
 
     static handleNotFoundError(entity: string) {
-        throw new GraphQLError(`${entity} not found`, {
+        console.log('not found errror')
+        throw new GraphQLError(`${entity} NOT FOUND`, {
             extensions: {
                 code: "NOT_FOUND",
                 http: { status: 404 },

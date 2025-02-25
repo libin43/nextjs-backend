@@ -59,7 +59,7 @@ export class AuthService {
 
         }
         else {
-            console.log('no user found.')
+            ErrorHandler.handleNotFoundError("User")
         }
 
     }

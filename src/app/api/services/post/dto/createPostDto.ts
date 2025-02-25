@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsString, Length, Matches, MinLength, MaxLength } from "class-validator";
+import { IsString, MinLength, MaxLength } from "class-validator";
 
 export class CreatePostInput {
     @IsString()
@@ -8,5 +8,4 @@ export class CreatePostInput {
     @IsString()
     @MinLength(5, { message: "Content must be at least 5 characters" })
     content!: string;
-
 }

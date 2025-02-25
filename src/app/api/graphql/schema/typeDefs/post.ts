@@ -9,15 +9,17 @@ export const posTypeDefs = gql`
 #     total: Int
 #   }
 
+scalar DateTime
+
   type Post {
     id: ID!
     title: String!
-    content: String!
+    content: String
     authorId: ID!
     createdById: ID
     updatedById: ID
-    createdAt: String!
-    updatedAt: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 
   type PostList {
