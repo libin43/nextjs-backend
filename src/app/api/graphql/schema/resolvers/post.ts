@@ -11,7 +11,6 @@ import { ErrorHandler } from "@/utils/errorHandler";
 import { authorizeRoles } from "@/middlewares/roleMiddleware";
 
 const postService = new PostService()
-const authService = new AuthService()
 
 export const postResolvers = {
 

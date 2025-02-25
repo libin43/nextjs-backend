@@ -1,12 +1,10 @@
 
-import { UserService } from "@/app/api/services/user";
-import { CreateUserInputType } from "../../../../../../types/graphql";
+import { UserService } from "@/app/api/services/user/service";
 import { CreateUserInput, UserRole } from "@/app/api/services/user/dto/createUserDto";
 import { UpdateUserInput } from "@/app/api/services/user/dto/updateUserDto";
 import { LoginInput } from "@/app/api/services/auth/dto/loginUser.Dto";
 import { AuthService } from "@/app/api/services/auth/service";
-import { NextApiResponse } from "next";
-import { NextRequest, NextResponse } from "next/server";
+
 
 const userService = new UserService()
 const authService = new AuthService()
