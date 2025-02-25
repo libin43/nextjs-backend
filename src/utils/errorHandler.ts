@@ -2,22 +2,16 @@ import { GraphQLError } from "graphql";
 
 export class ErrorHandler {
     static handleValidationError(errors: any) {
-        const formattedErrors = errors.map((res: any) => ({
-            property: res.property,
-            messages: Object.values(res.constraints || {}),
-        }));
-
         throw new GraphQLError("Validation failed", {
             extensions: {
                 code: "BAD_USER_INPUT",
                 http: { status: 400 },
-                errors: formattedErrors,
+                errors: errors.errors,
             },
         });
     }
 
-    static handlePrismaError(error: any) {
-        if (error.code === "P2002") {
+    static handlePrismaUniqueConstraintError(error: any) {
             throw new GraphQLError(
                 `User with this ${error.meta?.target?.join(", ")} already exists`,
                 {
@@ -27,11 +21,6 @@ export class ErrorHandler {
                     },
                 }
             );
-        }
-
-        throw new GraphQLError("Internal Server Error", {
-            extensions: { code: "INTERNAL_SERVER_ERROR", http: { status: 500 } },
-        });
     }
 
     static handleNotFoundError(entity: string) {
@@ -40,6 +29,12 @@ export class ErrorHandler {
                 code: "NOT_FOUND",
                 http: { status: 404 },
             },
+        });
+    }
+
+    static internalServerError() {
+        throw new GraphQLError("Internal Server Error", {
+            extensions: { code: "INTERNAL_SERVER_ERROR", http: { status: 500 } },
         });
     }
 }
