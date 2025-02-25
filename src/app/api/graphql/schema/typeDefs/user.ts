@@ -17,14 +17,19 @@ export const userTypeDefs = gql`
     email: String!
     password: String!
     role: String!
-    createdById: ID
-    updatedById: ID
+    # createdById: ID
+    # updatedById: ID
     createdAt: String!
     updatedAt: String!
   }
 
   type Query {
     hello: String!
+  }
+
+  enum UserRole {
+  USER
+  ADMIN
   }
 
 
@@ -34,9 +39,9 @@ export const userTypeDefs = gql`
     mobile: String!
     email: String!
     password: String!
-    role: String!
-    createdById: ID
-    updatedById: ID
+    role: UserRole!
+    # createdById: ID
+    # updatedById: ID
   }
 
 

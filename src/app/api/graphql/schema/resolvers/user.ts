@@ -1,5 +1,10 @@
 // import { createSheet, deleteSheet, getAllSheets, updateSheet } from '@/app/api/services/sheets'
 
+import { UserService } from "@/app/api/services/user";
+import { CreateUserInputType } from "../../../../../../types/graphql";
+
+const userService = new UserService();
+
 export const userResolvers = {
     Query: {
         hello: () => "Hello World!",
@@ -7,18 +12,20 @@ export const userResolvers = {
         // getAllSheets: async () => getAllSheets()
     },
 
-    
+
 
     Mutation: {
-        // createSheet: async (_, { sheet }, { role, creator }) =>
-            // createSheet({ ...sheet, role, creator }),
-
-        // updateSheet: async (_, { id, sheet }, { role, creator }) =>
-        //     updateSheet({ id, ...sheet, role, creator }),
-
-        // deleteSheet: async (_, { id }, { role, creator }) =>
-        //     deleteSheet({ id, role, creator }),
-    }
+        createUser: async (_: any, { input }: {input: CreateUserInputType}) => {
+            try {
+                // console.log(input, 'input')
+                const newUser = await userService.createUser(input);
+                console.log(newUser, 'created in db')
+                return newUser;
+            } catch (error) {
+                return error
+            }
+        },
+    },
 };
 
 // export default sheets;
