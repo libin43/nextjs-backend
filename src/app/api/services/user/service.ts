@@ -71,7 +71,7 @@ export class UserService {
 
             const existingUser = await prisma.user.findUnique({ where: { id: userData.id } });
             if (!existingUser) {
-                ErrorHandler.handleNotFoundError('User')
+                throw new Error('USER_NOT_FOUND')
             }
 
             const updatedUser = await prisma.user.update({
@@ -92,9 +92,11 @@ export class UserService {
             if (error.type === "VALIDATION_ERROR") {
                 ErrorHandler.handleValidationError(error)
             }
-
             if (error.code === "P2002") {
                 ErrorHandler.handlePrismaUniqueConstraintError(error)
+            }
+            if (error.message === "USER_NOT_FOUND") {
+                ErrorHandler.handleNotFoundError("USER")
             }
 
             ErrorHandler.internalServerError()
@@ -119,10 +121,13 @@ export class UserService {
                 }
             })
             if (!user) {
-                ErrorHandler.handleNotFoundError('User')
+                throw new Error('USER_NOT_FOUND')
             }
             return user
-        } catch (error) {
+        } catch (error: any) {
+            if (error.message === "USER_NOT_FOUND") {
+                ErrorHandler.handleNotFoundError("USER")
+            }
             ErrorHandler.internalServerError()
         }
     }
