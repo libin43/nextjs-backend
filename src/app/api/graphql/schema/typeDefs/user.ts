@@ -23,8 +23,21 @@ export const userTypeDefs = gql`
     updatedAt: String!
   }
 
+  type UserList {
+  data: [User!]!
+  totalCount: Int!
+}
+
+
   type Query {
     hello: String!
+    getUser(id: ID!): User!
+    getAllUsers(
+    search: String
+    role: UserRole
+    page: Int!
+    limit: Int!
+  ): UserList!
   }
 
   enum UserRole {
@@ -45,8 +58,20 @@ export const userTypeDefs = gql`
   }
 
 
+  input UpdateUserInput {
+    id: ID!
+    fname: String
+    lname: String
+    mobile: String
+    email: String
+    password: String
+    role: UserRole
+  }
+
+
   type Mutation {
     createUser(input: CreateUserInput!): User!
+    updateUser(input: UpdateUserInput!): User!
   }
 
 #   type Query {
