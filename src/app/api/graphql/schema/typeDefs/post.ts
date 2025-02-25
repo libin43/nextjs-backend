@@ -22,14 +22,28 @@ scalar DateTime
     updatedAt: DateTime!
   }
 
+
+  type Author {
+    id: ID!
+    fname: String
+    lname: String
+  }
+
+  type PostById {
+    id: ID!
+    title: String!
+    content: String
+    author: Author
+  }
+
   type PostList {
-  data: [Post!]!
+  data: [PostById!]!
   totalCount: Int!
 }
 
 
   type Query {
-    getPost(id: ID!): Post!
+    getPost(id: ID!): PostById!
     getAllPosts(
     search: String
     page: Int!
@@ -56,6 +70,7 @@ scalar DateTime
   type Mutation {
     createPost(input: CreatePostInput!): Post!
     updatePost(input: UpdatePostInput!): Post!
+    deletePost(id: ID!): Post!
   }
 
 `;

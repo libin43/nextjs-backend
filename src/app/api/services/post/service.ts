@@ -20,7 +20,7 @@ export class PostService {
                     property: res.property,
                     messages: Object.values(res.constraints || {})
                 }));
-                throw { type: "VALIDATION_ERROR", errors: formattedErrors };
+                throw { type: "VALIDATION_ERROR", errors: formattedErrors }
             }
 
             const newPost = await prisma.post.create({
@@ -59,7 +59,7 @@ export class PostService {
                     messages: Object.values(res.constraints || {})
                 }));
 
-                throw { type: "VALIDATION_ERROR", errors: formattedErrors };
+                throw { type: "VALIDATION_ERROR", errors: formattedErrors }
             }
 
             const existingPost = await prisma.post.findUnique({ where: { id: postData.id } });
@@ -81,11 +81,10 @@ export class PostService {
                     content: postData.content,
                     updatedById: modifierId,
                 },
-            });
-
-            console.log(updatedPost, 'updated post')
+            })
 
             return updatedPost;
+
         } catch (error: any) {
 
             if (error.type === "VALIDATION_ERROR") {
@@ -104,6 +103,119 @@ export class PostService {
                 ErrorHandler.handleForbiddenError("POST")
             }
 
+            ErrorHandler.internalServerError()
+        }
+    }
+
+    async deletePost(id: string, modifierId: string, modifierRole: UserRole) {
+
+        try {
+            const existingPost = await prisma.post.findUnique({
+                where: {
+                    id,
+                },
+                select: {
+                    authorId: true,
+                    updatedAt: true,
+                }
+            })
+
+            if (!existingPost) {
+                throw new Error('POST_NOT_FOUND')
+            }
+
+            if (existingPost?.authorId !== modifierId && modifierRole !== UserRole.ADMIN) {
+                throw new Error('FORBIDDEN_POST')
+            }
+
+            return prisma.post.delete({
+                where: {
+                    id,
+                    updatedAt: existingPost?.updatedAt
+                },
+                select: {
+                    id: true,
+                }
+            })
+        } catch (error: any) {
+            if (error.message === "POST_NOT_FOUND") {
+                ErrorHandler.handleNotFoundError("POST")
+            }
+            if (error.message === "FORBIDDEN_POST") {
+                ErrorHandler.handleForbiddenError("POST")
+            }
+            ErrorHandler.internalServerError()
+        }
+    }
+
+    async getPostById(id: string) {
+        try {
+            const post = await prisma.post.findUnique({
+                where: {
+                    id
+                },
+                select: {
+                    id: true,
+                    title: true,
+                    content: true,
+                    author: {
+                        select: {
+                            id: true,
+                            fname: true,
+                            lname: true,
+                        }
+                    }
+                }
+            })
+            if (!post) {
+                throw new Error('POST_NOT_FOUND')
+            }
+            return post
+        } catch (error: any) {
+            if (error.message === "POST_NOT_FOUND") {
+                ErrorHandler.handleNotFoundError("POST")
+            }
+            ErrorHandler.internalServerError()
+        }
+    }
+
+    async getAllPosts(page: number, limit: number, where?: any) {
+        try {
+            const totalCount = await prisma.post.count({ where })
+            if (totalCount == 0) {
+                return {
+                    totalCount,
+                    data: []
+                }
+            }
+
+            console.log(totalCount, 'total count')
+            const data = await prisma.post.findMany({
+                where,
+                skip: (page - 1) * limit,
+                take: limit,
+                select: {
+                    id: true,
+                    title: true,
+                    content: true,
+                    author: {
+                        select: {
+                            id: true,
+                            fname: true,
+                            lname: true,
+                        }
+                    }
+                }
+            })
+
+            if (data.length > 0) {
+                return {
+                    totalCount,
+                    data
+                }
+            }
+        } catch (error) {
+            console.log(error)
             ErrorHandler.internalServerError()
         }
     }
