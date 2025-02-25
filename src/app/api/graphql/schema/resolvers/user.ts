@@ -52,10 +52,10 @@ export const userResolvers = {
 
 
     Mutation: {
-        login: async(_: any, { input }: { input: LoginInput }, context: any) => {
+        login: async(_: any, { input }: { input: LoginInput }) => {
             try {
 
-                console.log(context, 'context')
+                // console.log(context, 'context')
                 return authService.login(input)
             } catch (error) {
                 return error

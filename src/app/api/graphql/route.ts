@@ -8,21 +8,7 @@ import { GraphQLError, GraphQLFormattedError } from "graphql";
 import { NextApiRequest, NextApiResponse } from "next";
 import { JwtService } from "@/lib/jwtService";
 
-// Define your GraphQL schema
-// const typeDefs = gql`
-//   type Query {
-//     hello: String
-//   }
-// `;
-
-// Define your GraphQL resolvers
-// const resolvers = {
-//   Query: {
-//     hello: () => "Hello, world!",
-//   },
-// };
-
-// Create Apollo Server instance
+// Apollo Server instance
 const server = new ApolloServer({
   typeDefs: typeDefs,
   resolvers: resolvers,
@@ -42,19 +28,26 @@ const server = new ApolloServer({
   },
 })
 
-// Create the Next.js API handler
+// Next.js API handler
 const handler = startServerAndCreateNextHandler<NextRequest>(server, {
-  context: async (req, res) => {
+  context: async (req: NextRequest) => {
     const authHeader: string | null = req.headers.get('authorization');
-    // let user = null;
+    let user = null;
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.split(' ')[1];
-      const user = JwtService.verifyToken(token)
-      return { user }
+       user = JwtService.verifyToken(token)
+      // return { user }
     }
-    return { req }
-  }
+    return { req, user }
+  },
 });
 
 // Export the route handlers for Next.js API routes
-export { handler as GET, handler as POST }
+// export { handler as GET, handler as POST }
+export async function GET(req: NextRequest) {
+  return handler(req);
+}
+
+export async function POST(req: NextRequest) {
+  return handler(req);
+}
