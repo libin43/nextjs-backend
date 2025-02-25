@@ -23,6 +23,18 @@ export const userTypeDefs = gql`
     updatedAt: String!
   }
 
+  type UserLoginData {
+    fname: String!
+    lname: String!
+    mobile: String!
+    role: String!
+  }
+
+  type AuthPayload {
+    token: String!
+    user: UserLoginData!
+  }
+
   type UserList {
   data: [User!]!
   totalCount: Int!
@@ -57,6 +69,11 @@ export const userTypeDefs = gql`
     # updatedById: ID
   }
 
+  input LoginInput {
+    mobile: String!
+    password: String!
+  }
+
 
   input UpdateUserInput {
     id: ID!
@@ -71,6 +88,7 @@ export const userTypeDefs = gql`
 
   type Mutation {
     createUser(input: CreateUserInput!): User!
+    login(input: LoginInput!): AuthPayload!
     updateUser(input: UpdateUserInput!): User!
   }
 

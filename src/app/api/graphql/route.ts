@@ -5,6 +5,7 @@ import { gql } from "graphql-tag";
 import { typeDefs } from "./schema/typeDefs";
 import { resolvers } from "./schema/resolvers";
 import { GraphQLError, GraphQLFormattedError } from "graphql";
+import { NextApiRequest, NextApiResponse } from "next";
 
 // Define your GraphQL schema
 // const typeDefs = gql`
@@ -22,9 +23,8 @@ import { GraphQLError, GraphQLFormattedError } from "graphql";
 
 // Create Apollo Server instance
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  
+  typeDefs: typeDefs,
+  resolvers: resolvers,
   formatError: (formattedError: GraphQLFormattedError, error: unknown): GraphQLFormattedError => {
     if (error instanceof GraphQLError) {
       const extensions = error.extensions as { http?: { status?: number } }
@@ -42,7 +42,9 @@ const server = new ApolloServer({
 })
 
 // Create the Next.js API handler
-const handler = startServerAndCreateNextHandler<NextRequest>(server)
+const handler = startServerAndCreateNextHandler<NextRequest>(server, {
+  context: async (req, res) => ({ req, res }),
+});
 
 // Export the route handlers for Next.js API routes
 export { handler as GET, handler as POST }

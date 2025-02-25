@@ -3,8 +3,13 @@ import { UserService } from "@/app/api/services/user";
 import { CreateUserInputType } from "../../../../../../types/graphql";
 import { CreateUserInput, UserRole } from "@/app/api/services/user/dto/createUserDto";
 import { UpdateUserInput } from "@/app/api/services/user/dto/updateUserDto";
+import { LoginInput } from "@/app/api/services/auth/dto/loginUser.Dto";
+import { AuthService } from "@/app/api/services/auth/service";
+import { NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
-const userService = new UserService();
+const userService = new UserService()
+const authService = new AuthService()
 
 export const userResolvers = {
     Query: {
@@ -49,6 +54,16 @@ export const userResolvers = {
 
 
     Mutation: {
+        login: async(_: any, { input }: { input: LoginInput }, context: any) => {
+            try {
+
+                console.log(context, 'context')
+                return authService.login(input)
+            } catch (error) {
+                return error
+            }
+        },
+
         createUser: async (_: any, { input }: { input: CreateUserInput }) => {
             try {
                 // console.log(input, 'input')
