@@ -1,6 +1,6 @@
 import { gql } from "graphql-tag";
 
-export const userTypeDefs = gql`
+export const posTypeDefs = gql`
 
 #   type UserList {
 #     "Sheets Array"

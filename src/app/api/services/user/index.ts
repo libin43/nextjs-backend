@@ -4,6 +4,7 @@ import { plainToInstance } from "class-transformer";
 import { CreateUserInput } from "./dto/createUserDto";
 import { UpdateUserInput } from "./dto/updateUserDto";
 import { ErrorHandler } from "@/utils/errorHandler";
+import { BcryptService } from "@/lib/bcryptService";
 
 const prisma = new PrismaClient();
 
@@ -23,6 +24,8 @@ export class UserService {
             }
 
 
+            const hashPass = await BcryptService.hashPassword(user.password)
+
             console.log(user, 'data in user service')
 
             const newUser = await prisma.user.create({
@@ -31,7 +34,7 @@ export class UserService {
                     lname: user.lname,
                     email: user.email,
                     mobile: user.mobile,
-                    password: user.password,
+                    password: hashPass,
                     role: user.role,
                 },
             });
