@@ -17,15 +17,63 @@ export const userTypeDefs = gql`
     email: String!
     password: String!
     role: String!
-    createdById: ID
-    updatedById: ID
+    # createdById: ID
+    # updatedById: ID
     createdAt: String!
     updatedAt: String!
   }
 
+  type UserList {
+  data: [User!]!
+  totalCount: Int!
+}
+
+
   type Query {
     hello: String!
+    getUser(id: ID!): User!
+    getAllUsers(
+    search: String
+    role: UserRole
+    page: Int!
+    limit: Int!
+  ): UserList!
   }
+
+  enum UserRole {
+  USER
+  ADMIN
+  }
+
+
+  input CreateUserInput {
+    fname: String!
+    lname: String!
+    mobile: String!
+    email: String!
+    password: String!
+    role: UserRole!
+    # createdById: ID
+    # updatedById: ID
+  }
+
+
+  input UpdateUserInput {
+    id: ID!
+    fname: String
+    lname: String
+    mobile: String
+    email: String
+    password: String
+    role: UserRole
+  }
+
+
+  type Mutation {
+    createUser(input: CreateUserInput!): User!
+    updateUser(input: UpdateUserInput!): User!
+  }
+
 #   type Query {
 #     "Hello Query"
 #     hello: String
