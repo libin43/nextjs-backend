@@ -1,6 +1,6 @@
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { ApolloServer } from "@apollo/server";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { gql } from "graphql-tag";
 import { typeDefs } from "./schema/typeDefs";
 import { resolvers } from "./schema/resolvers";
@@ -48,6 +48,20 @@ const handler = startServerAndCreateNextHandler<NextRequest>(server, {
 
 // Export the route handlers for Next.js API routes
 // export { handler as GET, handler as POST }
+
+export async function OPTIONS(req: NextRequest) {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': '*', // Allow any origin (or specify allowed domains)
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Allow-Credentials': 'true',
+    },
+  });
+}
+
+
 export async function GET(req: NextRequest) {
   const response = await handler(req);
   response.headers.set('Access-Control-Allow-Origin', 'http://localhost:3000'); 
