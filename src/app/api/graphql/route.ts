@@ -7,11 +7,14 @@ import { resolvers } from "./schema/resolvers";
 import { GraphQLError, GraphQLFormattedError } from "graphql";
 import { NextApiRequest, NextApiResponse } from "next";
 import { JwtService } from "@/lib/jwtService";
+import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 
 // Apollo Server instance
 const server = new ApolloServer({
   typeDefs: typeDefs,
   resolvers: resolvers,
+  introspection: true,
+  plugins: [ApolloServerPluginLandingPageLocalDefault()],
   formatError: (formattedError: GraphQLFormattedError, error: unknown): GraphQLFormattedError => {
     if (error instanceof GraphQLError) {
       const extensions = error.extensions as { http?: { status?: number } }
