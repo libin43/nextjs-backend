@@ -53,7 +53,7 @@ export async function OPTIONS(req: NextRequest) {
   return new NextResponse(null, {
     status: 204,
     headers: {
-      'Access-Control-Allow-Origin': '*', // Allow any origin (or specify allowed domains)
+      'Access-Control-Allow-Origin': 'http://localhost:3000', // Allow any origin (or specify allowed domains)
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       'Access-Control-Allow-Credentials': 'true',
