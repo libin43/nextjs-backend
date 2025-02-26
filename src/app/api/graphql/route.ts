@@ -43,14 +43,21 @@ const handler = startServerAndCreateNextHandler<NextRequest>(server, {
     }
     return { req, user }
   },
+  
 });
 
 // Export the route handlers for Next.js API routes
 // export { handler as GET, handler as POST }
 export async function GET(req: NextRequest) {
-  return handler(req);
+  const response = await handler(req);
+  response.headers.set('Access-Control-Allow-Origin', 'http://localhost:3000'); 
+  response.headers.set('Access-Control-Allow-Credentials', 'true');
+  return response;
 }
 
 export async function POST(req: NextRequest) {
-  return handler(req);
+  const response = await handler(req);
+  response.headers.set('Access-Control-Allow-Origin', 'http://localhost:3000'); 
+  response.headers.set('Access-Control-Allow-Credentials', 'true');
+  return response;
 }
