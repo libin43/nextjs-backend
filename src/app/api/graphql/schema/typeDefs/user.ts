@@ -40,6 +40,11 @@ export const userTypeDefs = gql`
   totalCount: Int!
 }
 
+type logoutResponse {
+  success: Boolean!
+  message: String!
+}
+
 
   type Query {
     hello: String!
@@ -90,6 +95,7 @@ export const userTypeDefs = gql`
     createUser(input: CreateUserInput!): User!
     login(input: LoginInput!): AuthPayload!
     updateUser(input: UpdateUserInput!): User!
+    logout: logoutResponse!
   }
 
 #   type Query {

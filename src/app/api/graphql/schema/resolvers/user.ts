@@ -4,6 +4,8 @@ import { CreateUserInput, UserRole } from "@/app/api/services/user/dto/createUse
 import { UpdateUserInput } from "@/app/api/services/user/dto/updateUserDto";
 import { LoginInput } from "@/app/api/services/auth/dto/loginUser.Dto";
 import { AuthService } from "@/app/api/services/auth/service";
+import { cookies } from "next/headers";
+import { deleteCookie, setCookie } from "@/middlewares/setCookie";
 
 
 const userService = new UserService()
@@ -52,11 +54,26 @@ export const userResolvers = {
 
 
     Mutation: {
-        login: async(_: any, { input }: { input: LoginInput }) => {
+        login: async (_: any, { input }: { input: LoginInput }) => {
             try {
 
-                // console.log(context, 'context')
-                return authService.login(input)
+                const login = await authService.login(input)
+                if (login?.token) {
+                    await setCookie(login.token, 'AccessToken')
+                }
+                return login
+            } catch (error) {
+                return error
+            }
+        },
+
+        logout: async () => {
+            try {
+                await deleteCookie('AccessToken')
+                return {
+                    success: true,
+                    message: "Logout successful"
+                }
             } catch (error) {
                 return error
             }
